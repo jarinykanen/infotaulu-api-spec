@@ -215,7 +215,6 @@ components:
         - images
         - color
         - staff
-        - metadata
       properties:
         id:
           type: string
@@ -233,8 +232,6 @@ components:
           description: Color for this schedule
         staff:
           $ref: "#/components/schemas/Staff"
-        metadata:
-          $ref: "#/components/schemas/Metadata"
 
     ScheduleImages:
       type: object
@@ -282,15 +279,10 @@ components:
       type: object
       description: Staff object
       required:
-        - scheduleId
         - morningShift
         - eveningShift
         - nightShift
       properties:
-        scheduleId:
-          type: string
-          format: uuid
-          readOnly: true
         morningShift:
           type: array
           description: List of image uri's of staff members for morning shift
