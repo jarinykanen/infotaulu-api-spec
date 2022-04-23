@@ -22,13 +22,13 @@ paths:
               schema:
                 type: string
 
-  /v1/examples:
+  /v1/schedules:
     get:
-      operationId: listExamples
-      summary: List examples.
-      description: Lists examples.
+      operationId: listSchedules
+      summary: List schedules.
+      description: Lists schedules.
       tags:
-        - Examples
+        - Schedules
       parameters:
         - name: firstResult
           in: query
@@ -40,213 +40,147 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
+        - name: startDate
+          in: query
+          description: From which date onwards the search is made. Includes the given date
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          description: Until which date the search is made. Includes the given date
+          schema:
+            type: string
+            format: date
       responses:
         "200":
-          description: List of examples
+          description: List of schedules
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Example"
+                  $ref: "#/components/schemas/Schedule"
           headers:
             X-Total-Count:
               schema:
                 type: integer
                 format: int64
-              description: Total count of examples with given filters.
-        "400":
+              description: Total count of schedules with given filters.
+        default:
           description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Attempted to make a call with unauthorized client
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      operationId: createExample
-      summary: Create an example.
-      description: Creates a new example.
+      operationId: createSchedule
+      summary: Create an schedule.
+      description: Creates a new schedule.
       tags:
-        - Examples
+        - Schedules
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Example"
+              $ref: "#/components/schemas/Schedule"
         description: Payload
         required: true
       responses:
         "200":
-          description: Created Example
+          description: Created Schedule
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Example"
-        "400":
+                $ref: "#/components/schemas/Schedule"
+        default:
           description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Attempted to make a call with unauthorized client
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  "/v1/examples/{exampleId}":
+  "/v1/schedules/{scheduleId}":
     get:
-      operationId: findExample
-      summary: Find a example.
-      description: Finds a example by id.
+      operationId: findSchedule
+      summary: Find a schedule.
+      description: Finds a schedule by id.
       tags:
-        - Examples
+        - Schedules
       parameters:
-        - name: exampleId
+        - name: scheduleId
           required: true
           in: path
-          description: example id
+          description: schedule id
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Example
+          description: Schedule
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Example"
-        "400":
+                $ref: "#/components/schemas/Schedule"
+        default:
           description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Attempted to make a call with unauthorized client
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateExample
-      summary: Update a example.
-      description: Updates a example
+      operationId: updateSchedule
+      summary: Update a schedule.
+      description: Updates a schedule
       tags:
-        - Examples
+        - Schedules
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Example"
+              $ref: "#/components/schemas/Schedule"
         description: Payload
         required: true
       parameters:
-        - name: exampleId
+        - name: scheduleId
           required: true
           in: path
-          description: example id
+          description: schedule id
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Updated Example
+          description: Updated Schedule
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Example"
-        "400":
+                $ref: "#/components/schemas/Schedule"
+        default:
           description: Invalid request was sent to the server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        "403":
-          description: Attempted to make a call with unauthorized client
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
     delete:
-      operationId: deleteExample
-      summary: Delete a example.
-      description: Deletes a example.
+      operationId: deleteSchedule
+      summary: Delete a schedule.
+      description: Deletes a schedule.
       tags:
-        - Examples
+        - Schedules
       parameters:
-        - name: exampleId
+        - name: scheduleId
           required: true
           in: path
-          description: example id
+          description: schedule id
           schema:
             type: string
             format: uuid
       responses:
         "204":
           description: Success
-        "400":
+        default:
           description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "403":
-          description: Attempted to make a call with unauthorized client
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        "500":
-          description: Internal server error
           content:
             application/json:
               schema:
@@ -273,26 +207,118 @@ components:
         message:
           type: string
 
-    Example:
+    Schedule:
       type: object
-      description: Example object
+      description: Schedule object
       required:
-        - name
-        - message
-        - amount
+        - date
+        - images
+        - color
+        - staff
+        - metadata
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-          description: Example object id in UUID format
-        name:
+          description: Schedule Id in UUID format
+        date:
           type: string
-          description: Example object name
-        amount:
-          type: integer
-          format: int32
-          description: Example object amount
+          format: date
+          description: Schedule date
+        images:
+          $ref: "#/components/schemas/ScheduleImages"
+        color:
+          type: string
+          description: Color for this schedule
+        staff:
+          $ref: "#/components/schemas/Staff"
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    ScheduleImages:
+      type: object
+      description: Schedule images object
+      required:
+        - dayOfTheWeek
+        - date
+        - month
+        - season
+        - year
+        - events
+      properties:
+        dayOfTheWeek:
+          type: string
+          format: uri
+          description: Image of the day of the week
+        date:
+          type: string
+          format: uri
+          description: Image of the date
+        month:
+          type: string
+          format: uri
+          description: Image of the month
+        season:
+          type: string
+          format: uri
+          description: Image of the season
+        year:
+          type: string
+          format: uri
+          description: Image of the year
+        holiday:
+          type: string
+          format: uri
+          description: Image of the holiday
+        events:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: List of event image URI's
+
+    Staff:
+      type: object
+      description: Staff object
+      required:
+        - scheduleId
+        - morningShift
+        - eveningShift
+        - nightShift
+      properties:
+        scheduleId:
+          type: string
+          format: uuid
+          readOnly: true
+        morningShift:
+          type: array
+          description: List of image uri's of staff members for morning shift
+          items:
+            type: string
+            format: uri
+        eveningShift:
+          type: array
+          description: List of image uri's of staff members for evening shift
+          items:
+            type: string
+            format: uri
+        nightShift:
+          type: array
+          description: List of image uri's of staff members for night shift
+          items:
+            type: string
+            format: uri
+
+    Metadata:
+      type: object
+      description: Metadata object
+      required:
+        - creatorId
+        - lastModifierId
+        - createdAt
+        - modifiedAt
+      properties:
         creatorId:
           description: Id of creator
           type: string
