@@ -1,0 +1,315 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Template API-spec
+
+security:
+  - bearerAuth: []
+
+paths:
+  /v1/system/ping:
+    get:
+      operationId: ping
+      summary: Replies with pong
+      description: Replies ping with pong
+      tags:
+        - System
+      responses:
+        "200":
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /v1/examples:
+    get:
+      operationId: listExamples
+      summary: List examples.
+      description: Lists examples.
+      tags:
+        - Examples
+      parameters:
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of examples
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Example"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of examples with given filters.
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Attempted to make a call with unauthorized client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createExample
+      summary: Create an example.
+      description: Creates a new example.
+      tags:
+        - Examples
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Example"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Example
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Example"
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Attempted to make a call with unauthorized client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/examples/{exampleId}":
+    get:
+      operationId: findExample
+      summary: Find a example.
+      description: Finds a example by id.
+      tags:
+        - Examples
+      parameters:
+        - name: exampleId
+          required: true
+          in: path
+          description: example id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Example
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Example"
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Attempted to make a call with unauthorized client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateExample
+      summary: Update a example.
+      description: Updates a example
+      tags:
+        - Examples
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Example"
+        description: Payload
+        required: true
+      parameters:
+        - name: exampleId
+          required: true
+          in: path
+          description: example id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Example
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Example"
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Attempted to make a call with unauthorized client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteExample
+      summary: Delete a example.
+      description: Deletes a example.
+      tags:
+        - Examples
+      parameters:
+        - name: exampleId
+          required: true
+          in: path
+          description: example id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "400":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Attempted to make a call with unauthorized client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      description: Error object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    Example:
+      type: object
+      description: Example object
+      required:
+        - name
+        - message
+        - amount
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Example object id in UUID format
+        name:
+          type: string
+          description: Example object name
+        amount:
+          type: integer
+          format: int32
+          description: Example object amount
+        creatorId:
+          description: Id of creator
+          type: string
+          format: uuid
+          readOnly: true
+        lastModifierId:
+          description: Id of last modifier
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Created date
+          readOnly: true
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Date modified
+          readOnly: true
