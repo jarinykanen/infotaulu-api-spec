@@ -186,6 +186,55 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/images:
+    get:
+      operationId: listImages
+      summary: Lists all images
+      description: Lists all images
+      tags:
+        - Images
+      responses:
+        "200":
+          description: List of images
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uri
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: uploadImage
+      summary: Uploads image
+      description: Uploads image
+      tags:
+        - Images
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: Image path
+          content:
+            application/json:
+              schema:
+                type: string
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
