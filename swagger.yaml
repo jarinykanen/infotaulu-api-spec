@@ -40,15 +40,9 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
-        - name: startDate
+        - name: date
           in: query
-          description: From which date onwards the search is made. Includes the given date
-          schema:
-            type: string
-            format: date
-        - name: endDate
-          in: query
-          description: Until which date the search is made. Includes the given date
+          description: Filter by date
           schema:
             type: string
             format: date
