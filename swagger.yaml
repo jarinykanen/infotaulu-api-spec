@@ -322,10 +322,25 @@ components:
       type: object
       description: Staff object
       required:
+        - morningShiftImage
+        - eveningShiftImage
+        - nightShiftImage
         - morningShift
         - eveningShift
         - nightShift
       properties:
+        morningShiftImage:
+          type: string
+          format: uri
+          description: Placeholder image for morning shift
+        eveningShiftImage:
+          type: string
+          format: uri
+          description: Placeholder image for evening shift
+        nightShiftImage:
+          type: string
+          format: uri
+          description: Placeholder image for night shift
         morningShift:
           type: array
           description: List of image uri's of staff members for morning shift
