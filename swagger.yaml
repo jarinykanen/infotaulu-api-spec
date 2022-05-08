@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Template API-spec
+  title: Infotaulu API-spec
 
 security:
   - bearerAuth: []
@@ -40,15 +40,9 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
-        - name: startDate
+        - name: date
           in: query
-          description: From which date onwards the search is made. Includes the given date
-          schema:
-            type: string
-            format: date
-        - name: endDate
-          in: query
-          description: Until which date the search is made. Includes the given date
+          description: Filter by date
           schema:
             type: string
             format: date
@@ -186,6 +180,147 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/settings:
+    get:
+      operationId: listSettings
+      summary: List settings.
+      description: Lists settings.
+      tags:
+        - Settings
+      responses:
+        "200":
+          description: List of settings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Setting"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of settings with given filters.
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createSetting
+      summary: Create an setting.
+      description: Creates a new setting.
+      tags:
+        - Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Setting"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Setting
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Setting"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  "/v1/settings/{settingId}":
+    get:
+      operationId: findSetting
+      summary: Find a setting.
+      description: Finds a setting by id.
+      tags:
+        - Settings
+      parameters:
+        - name: settingId
+          required: true
+          in: path
+          description: setting id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Setting
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Setting"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateSetting
+      summary: Update a setting.
+      description: Updates a setting
+      tags:
+        - Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Setting"
+        description: Payload
+        required: true
+      parameters:
+        - name: settingId
+          required: true
+          in: path
+          description: setting id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Setting
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Setting"
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSetting
+      summary: Delete a setting.
+      description: Deletes a setting.
+      tags:
+        - Settings
+      parameters:
+        - name: settingId
+          required: true
+          in: path
+          description: setting id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        default:
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -301,6 +436,32 @@ components:
           items:
             type: string
             format: uri
+
+    Setting:
+      type: object
+      description: Settings object
+      required:
+        - morningShiftImage
+        - eveningShiftImage
+        - nightShiftImage
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Setting Id in UUID format
+        morningShiftImage:
+          type: string
+          format: uri
+          description: Placeholder image for morning shift
+        eveningShiftImage:
+          type: string
+          format: uri
+          description: Placeholder image for evening shift
+        nightShiftImage:
+          type: string
+          format: uri
+          description: Placeholder image for night shift
 
     Metadata:
       type: object
