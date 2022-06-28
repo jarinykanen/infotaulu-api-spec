@@ -348,7 +348,6 @@ components:
       required:
         - date
         - images
-        - color
         - staff
       properties:
         id:
