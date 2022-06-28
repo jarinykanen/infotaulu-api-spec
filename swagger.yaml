@@ -444,6 +444,7 @@ components:
         - morningShiftImage
         - eveningShiftImage
         - nightShiftImage
+        - colors
       properties:
         id:
           type: string
@@ -462,6 +463,11 @@ components:
           type: string
           format: uri
           description: Placeholder image for night shift
+        colors:
+          type: array
+          items:
+            type: string
+          description: List of default colors for week days
 
     Metadata:
       type: object
